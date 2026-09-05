@@ -28,6 +28,8 @@ import AdminOrders from './components/AdminOrders';
 import AdminMenu from './components/AdminMenu';
 import AdminCategories from './components/AdminCategories';
 
+import { API_BASE } from './config';
+
 export default function App() {
   // Theme & Layout state
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
@@ -59,13 +61,13 @@ export default function App() {
   // Fetch Menu and Categories from Backend APIs
   const refreshData = async () => {
     try {
-      const menuRes = await fetch('http://localhost:5000/api/menu');
+      const menuRes = await fetch(`${API_BASE}/menu`);
       if (menuRes.ok) {
         const menuData = await menuRes.json();
         setMenuItems(menuData);
       }
       
-      const catRes = await fetch('http://localhost:5000/api/categories');
+      const catRes = await fetch(`${API_BASE}/categories`);
       if (catRes.ok) {
         const catData = await catRes.json();
         setCategories(catData);
@@ -134,7 +136,7 @@ export default function App() {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch(`${API_BASE}/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderPayload)
@@ -161,7 +163,7 @@ export default function App() {
   // Add review to a menu item
   const handleAddReview = async (itemId, reviewData) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/menu/${itemId}/reviews`, {
+      const response = await fetch(`${API_BASE}/menu/${itemId}/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reviewData)
@@ -190,7 +192,7 @@ export default function App() {
     e.preventDefault();
     setLoginError('');
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: loginUsername, password: loginPassword })

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IndianRupee, ShoppingBag, Flame, Star, Award, TrendingUp } from 'lucide-react';
+import { API_BASE } from '../config';
 
 export default function AdminDashboard({ token }) {
   const [analytics, setAnalytics] = useState(null);
@@ -9,7 +10,7 @@ export default function AdminDashboard({ token }) {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/orders/analytics', {
+        const response = await fetch(`${API_BASE}/orders/analytics`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

@@ -30,7 +30,15 @@ export default function ItemDetailModal({ item, onClose, onAddReview, onAddToCar
         
         {/* Large Image Header */}
         <div className="detail-modal-img-container">
-          <img src={item.image} alt={item.name} className="detail-modal-img" />
+          <img 
+            src={item.image} 
+            alt={item.name} 
+            className="detail-modal-img" 
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop';
+            }}
+          />
           <button className="close-modal-btn" onClick={onClose} aria-label="Close modal">
             <X size={20} />
           </button>

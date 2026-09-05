@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Check, X } from 'lucide-react';
+import { API_BASE } from '../config';
 
 export default function AdminMenu({ menuItems, categories, token, onRefreshData }) {
   const [editingItem, setEditingItem] = useState(null); // null means not editing or creating
@@ -88,8 +89,8 @@ export default function AdminMenu({ menuItems, categories, token, onRefreshData 
 
     try {
       const url = isCreating 
-        ? 'http://localhost:5000/api/menu'
-        : `http://localhost:5000/api/menu/${editingItem._id}`;
+        ? `${API_BASE}/menu`
+        : `${API_BASE}/menu/${editingItem._id}`;
       const method = isCreating ? 'POST' : 'PUT';
 
       const response = await fetch(url, {
@@ -121,7 +122,7 @@ export default function AdminMenu({ menuItems, categories, token, onRefreshData 
     if (!window.confirm('Are you sure you want to remove this culinary dish from the menu?')) return;
     
     try {
-      const response = await fetch(`http://localhost:5000/api/menu/${itemId}`, {
+      const response = await fetch(`${API_BASE}/menu/${itemId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -137,7 +138,7 @@ export default function AdminMenu({ menuItems, categories, token, onRefreshData 
 
   const toggleAvailabilityInline = async (item) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/menu/${item._id}`, {
+      const response = await fetch(`${API_BASE}/menu/${item._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

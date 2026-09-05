@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, CheckCircle2, ChevronRight, Star, HeartHandshake, Printer } from 'lucide-react';
 import QRCode from 'react-qr-code';
+import { API_BASE } from '../config';
 
 export default function OrderTracker({ orderId, onCloseTracker }) {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
+  const [paymentMethod, setPaymentMethod] = useState('cash');
   const [showQR, setShowQR] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
@@ -19,7 +21,7 @@ export default function OrderTracker({ orderId, onCloseTracker }) {
 
     const fetchOrder = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/orders`);
+        const response = await fetch(`${API_BASE}/orders`);
         if (!response.ok) throw new Error('Failed to fetch orders');
         const data = await response.json();
         
@@ -57,7 +59,7 @@ export default function OrderTracker({ orderId, onCloseTracker }) {
     e.preventDefault();
     setSubmittingFeedback(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/orders/${orderId}/feedback`, {
+      const res = await fetch(`${API_BASE}/orders/${orderId}/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rating, comment })
@@ -197,6 +199,25 @@ export default function OrderTracker({ orderId, onCloseTracker }) {
             <span>Total Paid:</span>
             <span>₹{total.toFixed(2)}</span>
           </div>
+          {/* Payment Method Selection */}
+          <div style={{ marginTop: '0.5rem' }}>
+            <span>Payment Method:</span>
+            <label style={{ marginLeft: '0.5rem' }}>
+              <input type="radio" name="payment" value="cash" checked={paymentMethod === 'cash'} onChange={() => setPaymentMethod('cash')} />
+              Cash
+            </label>
+            <label style={{ marginLeft: '0.5rem' }}>
+              <input type="radio" name="payment" value="upi" checked={paymentMethod === 'upi'} onChange={() => setPaymentMethod('upi')} />
+              UPI
+            </label>
+          </div>
+          {/* Conditional QR Code for UPI */}
+          {paymentMethod === 'upi' && (
+            <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+              <div style={{ marginBottom: '0.2rem' }}>Scan to pay ₹{total.toFixed(2)}</div>
+              <QRCode value={`upi://pay?pa=hotelmenu@upi&pn=Hotel%20Menu&am=${total.toFixed(2)}&cu=INR`} size={128} />
+            </div>
+          )}
         </div>
 
         {order.note && (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, ShieldAlert } from 'lucide-react';
+import { API_BASE } from '../config';
 
 export default function AdminCategories({ categories, token, onRefreshData }) {
   const [name, setName] = useState('');
@@ -14,7 +15,7 @@ export default function AdminCategories({ categories, token, onRefreshData }) {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/categories', {
+      const response = await fetch(`${API_BASE}/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +43,7 @@ export default function AdminCategories({ categories, token, onRefreshData }) {
     if (!window.confirm('Are you sure you want to remove this category? Menu items under this category will remain, but their category label will have to be remapped.')) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/categories/${catId}`, {
+      const response = await fetch(`${API_BASE}/categories/${catId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

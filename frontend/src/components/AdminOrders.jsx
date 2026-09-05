@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Check, ChevronRight, User, AlertTriangle } from 'lucide-react';
+import { API_BASE } from '../config';
 
 export default function AdminOrders({ token }) {
   const [orders, setOrders] = useState([]);
@@ -11,7 +12,7 @@ export default function AdminOrders({ token }) {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch(`${API_BASE}/orders`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -41,7 +42,7 @@ export default function AdminOrders({ token }) {
 
   const handleUpdateStatus = async (orderId, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const res = await fetch(`${API_BASE}/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

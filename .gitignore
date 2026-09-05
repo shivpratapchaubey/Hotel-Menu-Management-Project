@@ -9,6 +9,9 @@ frontend/dist/
 # Environment and secrets
 .env
 backend/.env
+frontend/.env
+!.env.example
+!*/.env.example
 
 # IDE & Personal files
 .vscode/

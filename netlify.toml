@@ -1,0 +1,15 @@
+# Netlify configuration file for Hotel Menu Management System
+
+[build]
+  base = "frontend"
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  VITE_API_URL = "https://hotel-menu-management-project-1.onrender.com/api"
+
+# SPA routing redirect rule so deep routes don't return 404
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

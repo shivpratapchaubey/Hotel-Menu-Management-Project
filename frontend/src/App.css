@@ -1321,3 +1321,30 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Admin Left Sidebar Nav Items ───────────────────────── */
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+  text-align: left;
+  border-left: 3px solid transparent;
+}
+.admin-nav-item:hover {
+  background: var(--surface-hover);
+  color: var(--text-main);
+}
+.admin-nav-item.active {
+  background: var(--primary-glow);
+  color: var(--primary);
+  border-left-color: var(--primary);
+  font-weight: 600;
+}

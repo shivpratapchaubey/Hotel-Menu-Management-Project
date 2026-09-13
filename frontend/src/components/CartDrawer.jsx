@@ -13,7 +13,7 @@ export default function CartDrawer({
 }) {
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const tax = subtotal * 0.08; // 8% Tax
-  const serviceCharge = subtotal > 0 ? 3.99 : 0; // Flat service charge or delivery/table fee
+  const serviceCharge = subtotal > 0 ? 40 : 0; // Flat service charge or delivery/table fee
   const total = subtotal + tax + serviceCharge;
 
   return (

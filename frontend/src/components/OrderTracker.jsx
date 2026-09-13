@@ -21,22 +21,15 @@ export default function OrderTracker({ orderId, onCloseTracker }) {
 
     const fetchOrder = async () => {
       try {
-        const response = await fetch(`${API_BASE}/orders`);
-        if (!response.ok) throw new Error('Failed to fetch orders');
-        const data = await response.json();
-        
-        // Find our order
-        const currentOrder = data.find(o => o._id === orderId);
-        if (currentOrder && active) {
+        const response = await fetch(`${API_BASE}/orders/track/${orderId}`);
+        if (!response.ok) throw new Error('Failed to fetch order');
+        const currentOrder = await response.json();
+        if (active) {
           setOrder(currentOrder);
           setLoading(false);
-          // If order has feedback already, reflect it
           if (currentOrder.feedback && currentOrder.feedback.rating) {
             setFeedbackSubmitted(true);
           }
-        } else if (active) {
-          setError('Order not found or was removed.');
-          setLoading(false);
         }
       } catch (err) {
         if (active) {

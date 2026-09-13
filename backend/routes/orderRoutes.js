@@ -31,6 +31,20 @@ router.post('/', async (req, res) => {
   }
 });
 
+// @route   GET api/orders/track/:id
+// @desc    Track a single order by ID (public - for customer)
+// @access  Public
+router.get('/track/:id', async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ msg: 'Order not found' });
+    res.json(order);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route   GET api/orders
 // @desc    Get all orders
 // @access  Private (Admin/Staff)

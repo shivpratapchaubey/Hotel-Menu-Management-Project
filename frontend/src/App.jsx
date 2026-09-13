@@ -34,7 +34,7 @@ export default function App() {
   // Theme & Layout state
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [isAdmin, setIsAdmin] = useState(false);
-  const [adminTab, setAdminTab] = useState('orders'); // orders, dashboard, menu, categories
+  const [adminTab, setAdminTab] = useState('dashboard'); // orders, dashboard, menu, categories
   const [activeOrderId, setActiveOrderId] = useState(localStorage.getItem('activeOrderId') || null);
 
   // Data states
@@ -117,7 +117,7 @@ export default function App() {
   const handleCheckoutSubmit = async (checkoutData) => {
     const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const tax = subtotal * 0.08;
-    const totalAmount = subtotal + tax + (subtotal > 0 ? 3.99 : 0);
+    const totalAmount = subtotal + tax + (subtotal > 0 ? 40 : 0);
 
     const orderPayload = {
       items: cartItems.map(ci => ({
@@ -295,67 +295,61 @@ export default function App() {
       {/* Main Container */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         {isAdmin ? (
-          /* Admin Panel Layout */
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <div className="admin-nav-bar" style={{ background: 'var(--surface-hover)', padding: '0.5rem' }}>
-              <div className="admin-nav" style={{ maxWidth: '1400px', margin: '0 auto', borderBottom: 'none', paddingBottom: 0 }}>
-                <button 
-                  className={`admin-nav-item ${adminTab === 'orders' ? 'active' : ''}`}
-                  onClick={() => setAdminTab('orders')}
-                >
-                  <ClipboardList size={14} style={{ marginRight: '0.4rem', display: 'inline' }} />
-                  Live Orders (KOT)
-                </button>
-                <button 
-                  className={`admin-nav-item ${adminTab === 'dashboard' ? 'active' : ''}`}
-                  onClick={() => setAdminTab('dashboard')}
-                >
-                  <LayoutDashboard size={14} style={{ marginRight: '0.4rem', display: 'inline' }} />
-                  Analytics Dashboard
-                </button>
-                <button 
-                  className={`admin-nav-item ${adminTab === 'menu' ? 'active' : ''}`}
-                  onClick={() => setAdminTab('menu')}
-                >
-                  <FileEdit size={14} style={{ marginRight: '0.4rem', display: 'inline' }} />
-                  Menu Manager
-                </button>
-                <button 
-                  className={`admin-nav-item ${adminTab === 'categories' ? 'active' : ''}`}
-                  onClick={() => setAdminTab('categories')}
-                >
-                  <Tags size={14} style={{ marginRight: '0.4rem', display: 'inline' }} />
-                  Categories Editor
-                </button>
-                
-                <button 
-                  className="admin-nav-item" 
-                  onClick={handleAdminLogout}
-                  style={{ marginLeft: 'auto', color: 'var(--accent-nonveg)' }}
-                >
-                  <LogOut size={14} style={{ marginRight: '0.4rem', display: 'inline' }} />
-                  Log Out ({username})
-                </button>
+          /* Admin Panel Layout - Left Sidebar */
+          <div style={{ flex: 1, display: 'flex' }}>
+            {/* Left Admin Sidebar */}
+            <aside style={{
+              width: '220px',
+              minWidth: '220px',
+              background: 'var(--surface)',
+              borderRight: '1px solid var(--surface-border)',
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '1rem 0',
+              gap: '0.25rem'
+            }}>
+              <div style={{ padding: '0.75rem 1rem 1rem', borderBottom: '1px solid var(--surface-border)', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Admin Panel</span>
+                <div style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 600, marginTop: '0.2rem' }}>{username}</div>
               </div>
-            </div>
-
-            {adminTab === 'orders' && <AdminOrders token={token} />}
-            {adminTab === 'dashboard' && <AdminDashboard token={token} />}
-            {adminTab === 'menu' && (
-              <AdminMenu 
-                menuItems={menuItems} 
-                categories={categories} 
-                token={token} 
-                onRefreshData={refreshData} 
-              />
-            )}
-            {adminTab === 'categories' && (
-              <AdminCategories 
-                categories={categories} 
-                token={token} 
-                onRefreshData={refreshData} 
-              />
-            )}
+              {/* Nav items */}
+              <button className={`admin-nav-item ${adminTab === 'dashboard' ? 'active' : ''}`} onClick={() => setAdminTab('dashboard')} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem' }}>
+                <LayoutDashboard size={16} /> Analytics Dashboard
+              </button>
+              <button className={`admin-nav-item ${adminTab === 'orders' ? 'active' : ''}`} onClick={() => setAdminTab('orders')} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem' }}>
+                <ClipboardList size={16} /> Live Orders (KOT)
+              </button>
+              <button className={`admin-nav-item ${adminTab === 'menu' ? 'active' : ''}`} onClick={() => setAdminTab('menu')} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem' }}>
+                <FileEdit size={16} /> Menu Manager
+              </button>
+              <button className={`admin-nav-item ${adminTab === 'categories' ? 'active' : ''}`} onClick={() => setAdminTab('categories')} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem' }}>
+                <Tags size={16} /> Categories
+              </button>
+              <div style={{ flex: 1 }} />
+              <button className="admin-nav-item" onClick={handleAdminLogout} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem', color: 'var(--accent-nonveg)' }}>
+                <LogOut size={16} /> Logout
+              </button>
+            </aside>
+            {/* Main content */}
+            <main style={{ flex: 1, overflow: 'auto' }}>
+              {adminTab === 'dashboard' && <AdminDashboard token={token} />}
+              {adminTab === 'orders' && <AdminOrders token={token} />}
+              {adminTab === 'menu' && (
+                <AdminMenu
+                  menuItems={menuItems}
+                  categories={categories}
+                  token={token}
+                  onRefreshData={refreshData}
+                />
+              )}
+              {adminTab === 'categories' && (
+                <AdminCategories
+                  categories={categories}
+                  token={token}
+                  onRefreshData={refreshData}
+                />
+              )}
+            </main>
           </div>
         ) : (
           /* Client Front-end Layout */

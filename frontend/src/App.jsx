@@ -296,61 +296,60 @@ export default function App() {
               onClick={() => setIsAdmin(!isAdmin)} 
               className="admin-toggle"
               style={{ borderColor: isAdmin ? 'var(--primary)' : 'transparent', color: isAdmin ? 'var(--primary)' : 'var(--text-main)' }}
+              title={isAdmin ? 'Exit Admin' : 'Admin Panel'}
+              aria-label={isAdmin ? 'Exit Admin' : 'Admin Panel'}
             >
               <User size={18} />
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, marginLeft: '0.4rem', display: 'inline-block' }}>
+              <span className="admin-toggle-text">
                 {isAdmin ? 'Exit Admin' : 'Admin Panel'}
               </span>
             </button>
           ) : (
-            <button onClick={() => setShowLoginModal(true)} className="admin-toggle">
+            <button 
+              onClick={() => setShowLoginModal(true)} 
+              className="admin-toggle"
+              title="Admin Login"
+              aria-label="Admin Login"
+            >
               <LogIn size={18} />
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, marginLeft: '0.4rem' }}>Admin Log</span>
+              <span className="admin-toggle-text">Admin Log</span>
             </button>
           )}
         </div>
       </header>
 
       {/* Main Container */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div className="app-main-viewport">
         {isAdmin ? (
-          /* Admin Panel Layout - Left Sidebar */
-          <div style={{ flex: 1, display: 'flex' }}>
-            {/* Left Admin Sidebar */}
-            <aside style={{
-              width: '220px',
-              minWidth: '220px',
-              background: 'var(--surface)',
-              borderRight: '1px solid var(--surface-border)',
-              display: 'flex',
-              flexDirection: 'column',
-              padding: '1rem 0',
-              gap: '0.25rem'
-            }}>
-              <div style={{ padding: '0.75rem 1rem 1rem', borderBottom: '1px solid var(--surface-border)', marginBottom: '0.5rem' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Admin Panel</span>
-                <div style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 600, marginTop: '0.2rem' }}>{username}</div>
+          /* Admin Panel Layout */
+          <div className="admin-layout-wrapper">
+            {/* Admin Navigation */}
+            <aside className="admin-sidebar glassmorphism">
+              <div className="admin-sidebar-header">
+                <span className="admin-sidebar-badge">Admin Panel</span>
+                <div className="admin-sidebar-user">{username}</div>
               </div>
               {/* Nav items */}
-              <button className={`admin-nav-item ${adminTab === 'dashboard' ? 'active' : ''}`} onClick={() => setAdminTab('dashboard')} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem' }}>
-                <LayoutDashboard size={16} /> Analytics Dashboard
-              </button>
-              <button className={`admin-nav-item ${adminTab === 'orders' ? 'active' : ''}`} onClick={() => setAdminTab('orders')} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem' }}>
-                <ClipboardList size={16} /> Live Orders (KOT)
-              </button>
-              <button className={`admin-nav-item ${adminTab === 'menu' ? 'active' : ''}`} onClick={() => setAdminTab('menu')} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem' }}>
-                <FileEdit size={16} /> Menu Manager
-              </button>
-              <button className={`admin-nav-item ${adminTab === 'categories' ? 'active' : ''}`} onClick={() => setAdminTab('categories')} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem' }}>
-                <Tags size={16} /> Categories
-              </button>
-              <div style={{ flex: 1 }} />
-              <button className="admin-nav-item" onClick={handleAdminLogout} style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', borderRadius: 0, gap: '0.5rem', color: 'var(--accent-nonveg)' }}>
-                <LogOut size={16} /> Logout
-              </button>
+              <nav className="admin-sidebar-nav">
+                <button className={`admin-nav-item ${adminTab === 'dashboard' ? 'active' : ''}`} onClick={() => setAdminTab('dashboard')}>
+                  <LayoutDashboard size={16} /> <span>Analytics</span>
+                </button>
+                <button className={`admin-nav-item ${adminTab === 'orders' ? 'active' : ''}`} onClick={() => setAdminTab('orders')}>
+                  <ClipboardList size={16} /> <span>Live Orders</span>
+                </button>
+                <button className={`admin-nav-item ${adminTab === 'menu' ? 'active' : ''}`} onClick={() => setAdminTab('menu')}>
+                  <FileEdit size={16} /> <span>Menu</span>
+                </button>
+                <button className={`admin-nav-item ${adminTab === 'categories' ? 'active' : ''}`} onClick={() => setAdminTab('categories')}>
+                  <Tags size={16} /> <span>Categories</span>
+                </button>
+                <button className="admin-nav-item admin-logout-btn" onClick={handleAdminLogout}>
+                  <LogOut size={16} /> <span>Logout</span>
+                </button>
+              </nav>
             </aside>
             {/* Main content */}
-            <main style={{ flex: 1, overflow: 'auto' }}>
+            <main className="admin-main-content">
               {adminTab === 'dashboard' && <AdminDashboard token={token} />}
               {adminTab === 'orders' && <AdminOrders token={token} />}
               {adminTab === 'menu' && (
@@ -428,18 +427,18 @@ export default function App() {
       {/* Table Select QR simulation overlay */}
       {showTableSelectQR && (
         <div className="modal-backdrop" onClick={() => setShowTableSelectQR(false)}>
-          <div className="detail-modal glassmorphism" style={{ maxWidth: '400px', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
+          <div className="detail-modal compact-modal glassmorphism" style={{ textAlign: 'center' }} onClick={e => e.stopPropagation()}>
             <div className="cart-header" style={{ padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 700 }}>Table QR Code Sim</h3>
             </div>
-            <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                 Diners scan table QR codes to access table-specific menu settings.
               </p>
               
-              <div className="qr-code-mock" style={{ width: '180px', height: '180px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div className="qr-code-mock" style={{ width: '160px', height: '160px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {/* Visual Representation of QR */}
-                <QrCode size={140} style={{ color: '#000' }} />
+                <QrCode size={130} style={{ color: '#000' }} />
               </div>
               
               <div className="form-group" style={{ width: '100%' }}>
@@ -465,7 +464,7 @@ export default function App() {
       {/* Admin Login Modal */}
       {showLoginModal && (
         <div className="modal-backdrop" onClick={() => setShowLoginModal(false)}>
-          <div className="detail-modal glassmorphism" style={{ maxWidth: '380px' }} onClick={e => e.stopPropagation()}>
+          <div className="detail-modal compact-modal glassmorphism" onClick={e => e.stopPropagation()}>
             <div className="cart-header" style={{ padding: '1.25rem' }}>
               <h3 style={{ fontWeight: 700 }}>Staff Authorization</h3>
             </div>

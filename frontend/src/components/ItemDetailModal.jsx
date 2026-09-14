@@ -50,7 +50,7 @@ export default function ItemDetailModal({ item, onClose, onAddReview, onAddToCar
           <div className="detail-header">
             <div className="detail-title-row">
               <h2 className="detail-title">{item.name}</h2>
-              <span className="item-card-price" style={{ fontSize: '1.6rem' }}>
+              <span className="detail-modal-price item-card-price">
                 ₹{item.price.toFixed(2)}
               </span>
             </div>

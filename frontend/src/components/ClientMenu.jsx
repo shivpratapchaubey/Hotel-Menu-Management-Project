@@ -67,10 +67,10 @@ export default function ClientMenu({
       {/* Main Menu Grid / Container */}
       <section className="menu-content">
         <div className="menu-content-header">
-          <h2 className="text-gradient" style={{ fontSize: '2rem' }}>
+          <h2 className="text-gradient menu-heading">
             {selectedCategory === 'All' ? 'Our Exquisite Menu' : selectedCategory}
           </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+          <p className="menu-subheading">
             Explore our curated culinary delights, crafted with fresh ingredients by world-class chefs.
           </p>
 

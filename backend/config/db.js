@@ -13,13 +13,28 @@ const connectDB = async () => {
   }
 
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hotel-menu', {
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/hotel-menu', {
       serverSelectionTimeoutMS: 3000 // Quick timeout to fail fast if MongoDB is not running
     });
     dbMode = 'mongodb';
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
     return 'mongodb';
   } catch (error) {
+    const localUri = 'mongodb://127.0.0.1:27017/hotel-menu';
+    if (process.env.MONGODB_URI && process.env.MONGODB_URI !== localUri) {
+      try {
+        console.log(`⚠️ Primary MongoDB connection failed (${error.message}). Trying local MongoDB...`);
+        const localConn = await mongoose.connect(localUri, {
+          serverSelectionTimeoutMS: 2000
+        });
+        dbMode = 'mongodb';
+        console.log(`✅ Local MongoDB Connected: ${localConn.connection.host}`);
+        return 'mongodb';
+      } catch (localErr) {
+        // Fall through to JSON DB mode
+      }
+    }
+
     dbMode = 'jsondb';
     console.log('--------------------------------------------------');
     console.log('⚠️ DATABASE WARNING: Could not connect to MongoDB!');

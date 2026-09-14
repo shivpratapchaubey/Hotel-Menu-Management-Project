@@ -1018,7 +1018,8 @@
       "createdAt": "2026-09-05T10:57:08.250Z",
       "username": "admin",
       "password": "$2a$10$xXg/s8aX/AlnBAXUnUD35e/A8gBGzcPOkbFF/1G3RJ6j3ie458.WS",
-      "role": "admin"
+      "role": "admin",
+      "updatedAt": "2026-09-14T16:03:18.071Z"
     }
   ]
 }

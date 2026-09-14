@@ -58,22 +58,41 @@ export default function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginError, setLoginError] = useState('');
 
-  // Fetch Menu and Categories from Backend APIs
+  // Fetch Menu and Categories from Backend APIs with seamless local fallback
   const refreshData = async () => {
+    let targetBase = API_BASE;
     try {
-      const menuRes = await fetch(`${API_BASE}/menu`);
+      let menuRes = await fetch(`${targetBase}/menu`);
+      if (!menuRes.ok && targetBase !== 'http://localhost:5000/api') {
+        targetBase = 'http://localhost:5000/api';
+        menuRes = await fetch(`${targetBase}/menu`);
+      }
       if (menuRes.ok) {
         const menuData = await menuRes.json();
         setMenuItems(menuData);
       }
       
-      const catRes = await fetch(`${API_BASE}/categories`);
+      let catRes = await fetch(`${targetBase}/categories`);
       if (catRes.ok) {
         const catData = await catRes.json();
         setCategories(catData);
       }
     } catch (error) {
       console.error("API connection failed:", error);
+      try {
+        const fallbackMenu = await fetch('http://localhost:5000/api/menu');
+        if (fallbackMenu.ok) {
+          const menuData = await fallbackMenu.json();
+          setMenuItems(menuData);
+        }
+        const fallbackCat = await fetch('http://localhost:5000/api/categories');
+        if (fallbackCat.ok) {
+          const catData = await fallbackCat.json();
+          setCategories(catData);
+        }
+      } catch (fallbackErr) {
+        console.error("Fallback API connection failed:", fallbackErr);
+      }
     }
   };
 
